@@ -1,0 +1,13 @@
+# Обязательно для всех ассетов и карт
+git lfs track "*.uasset"
+git lfs track "*.umap"
+
+# Рекомендуется для исходников контента
+git lfs track "*.fbx"
+git lfs track "*.obj"
+git lfs track "*.png"
+git lfs track "*.jpg"
+git lfs track "*.tga"
+git lfs track "*.psd"
+git lfs track "*.wav"
+git lfs track "*.mp3"
