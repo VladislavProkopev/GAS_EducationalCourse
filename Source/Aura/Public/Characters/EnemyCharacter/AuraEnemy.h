@@ -16,10 +16,13 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase
 
 public:
 	AAuraEnemy();
-	virtual void BeginPlay() override;
-
+	
+	/* На удаление, сделал без использования интерфейсов
 	UFUNCTION()
 	void HighLightActor(UPrimitiveComponent* TouchedComponent);
 	UFUNCTION()
 	void UnHighLightActor(UPrimitiveComponent* TouchedComponent);
+	*/
+protected:
+	virtual void BeginPlay() override;
 };

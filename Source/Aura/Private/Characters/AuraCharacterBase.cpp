@@ -3,6 +3,9 @@
 
 #include "Characters/AuraCharacterBase.h"
 
+#include "AbilitySystemComponent.h"
+#include "Characters/PlayerCharacter/AuraPlayerState.h"
+
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -22,6 +25,8 @@ UAttributeSet* AAuraCharacterBase::GetAttributeSet() const
 {
 	return AttributeSet;
 }
+
+
 
 void AAuraCharacterBase::BeginPlay()
 {
