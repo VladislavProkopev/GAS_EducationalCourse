@@ -13,5 +13,13 @@ UCLASS()
 class AURA_API AAuraEnemy : public AAuraCharacterBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AAuraEnemy();
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void HighLightActor(UPrimitiveComponent* TouchedComponent);
+	UFUNCTION()
+	void UnHighLightActor(UPrimitiveComponent* TouchedComponent);
 };
