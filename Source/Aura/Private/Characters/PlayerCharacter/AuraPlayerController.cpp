@@ -4,6 +4,8 @@
 #include "Characters/PlayerCharacter/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Characters/PlayerCharacter/AuraPlayerState.h"
+#include "UI/HUD/AuraHUD.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -19,9 +21,12 @@ void AAuraPlayerController::BeginPlay()
 	check(AuraContext); //Используем check вместо if чтобы получить краш системы если указатель не валиден
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(Subsystem);
+	if (Subsystem)
+	{
+		Subsystem->AddMappingContext(AuraContext,0);
+	}
 
-	Subsystem->AddMappingContext(AuraContext,0);
+	
 
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
@@ -30,6 +35,8 @@ void AAuraPlayerController::BeginPlay()
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputModeData.SetHideCursorDuringCapture(false);
 	SetInputMode(InputModeData);
+
+	
 }
 
 void AAuraPlayerController::SetupInputComponent()
@@ -39,6 +46,8 @@ void AAuraPlayerController::SetupInputComponent()
 	UEnhancedInputComponent* EnhancedInput = CastChecked<UEnhancedInputComponent>(InputComponent);
 	EnhancedInput->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
 }
+
+
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {

@@ -5,9 +5,11 @@
 
 #include "AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Characters/PlayerCharacter/AuraPlayerController.h"
 #include "Characters/PlayerCharacter/AuraPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter()
 {
@@ -30,10 +32,19 @@ AAuraCharacter::AAuraCharacter()
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState, TEXT("AuraPlayerState in AuraCharacter is nullptr in PossesedBy"));
+	checkf(AuraPlayerState, TEXT("AuraPlayerState in AuraCharacter is nullptr in PossesedBy"));
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
+
+	if (AAuraPlayerController* AuraController = Cast<AAuraPlayerController>(GetController()))
+	{
+		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraController->GetHUD()))
+		{
+			AuraHUD->InitOverlay(AuraController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
+	
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)
@@ -49,4 +60,5 @@ void AAuraCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	InitAbilityActorInfo(); //Инициализация для клиента
+	
 }
