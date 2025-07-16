@@ -4,6 +4,7 @@
 #include "Characters/PlayerCharacter/AuraCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Characters/PlayerCharacter/AuraPlayerController.h"
 #include "Characters/PlayerCharacter/AuraPlayerState.h"
@@ -34,6 +35,11 @@ void AAuraCharacter::InitAbilityActorInfo()
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	checkf(AuraPlayerState, TEXT("AuraPlayerState in AuraCharacter is nullptr in PossesedBy"));
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+	UAuraAbilitySystemComponent* TempVar = Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent());
+	if (TempVar)
+	{
+		TempVar->AbilityActorInfoSet();
+	}
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
 

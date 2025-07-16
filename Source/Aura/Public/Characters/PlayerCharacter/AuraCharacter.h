@@ -20,7 +20,8 @@ public:
 	
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
-	
+protected:
+	virtual void InitAbilityActorInfo() override;
 private:
 
 	UPROPERTY(EditAnywhere,Category=Camera)
@@ -29,5 +30,5 @@ private:
 	UPROPERTY(EditAnywhere,Category=Camera)
 	TObjectPtr<UCameraComponent> Camera;
 
-	void InitAbilityActorInfo();
+	
 };

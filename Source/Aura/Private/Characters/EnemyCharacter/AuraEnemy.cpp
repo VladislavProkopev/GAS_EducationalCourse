@@ -26,9 +26,19 @@ void AAuraEnemy::BeginPlay()
 		GetCapsuleComponent()->OnBeginCursorOver.AddDynamic(this, &AAuraEnemy::HighLightActor);
 		GetCapsuleComponent()->OnEndCursorOver.AddDynamic(this,&AAuraEnemy::UnHighLightActor);
 	}
+	InitAbilityActorInfo();
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
 	if (AbilitySystemComponent && AttributeSet)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this,this);
+		UAuraAbilitySystemComponent* TempVar = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+		if (TempVar)
+		{
+			TempVar->AbilityActorInfoSet();
+		}
 	}
 }
 
