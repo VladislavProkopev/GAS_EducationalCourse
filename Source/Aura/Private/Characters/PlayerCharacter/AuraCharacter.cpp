@@ -30,6 +30,14 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationRoll = false;
 }
 
+int32 AAuraCharacter::GetPlayerLevel()
+{
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	if(!AuraPlayerState) return 0;
+	
+	return AuraPlayerState->GetPlayerLevel();
+}
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
@@ -50,7 +58,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 			AuraHUD->InitOverlay(AuraController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
-	
+	InitializeDefaultAttributes();
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)

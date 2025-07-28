@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+
 #include "AuraCharacterBase.generated.h"
 
+class UGameplayEffect;
 class UAttributeSet;
 class UAbilitySystemComponent;
 
@@ -19,6 +21,7 @@ public:
 	AAuraCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const;
+
 	
 protected:
 	virtual void BeginPlay() override;
@@ -33,4 +36,17 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	virtual void InitAbilityActorInfo();
+
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
+
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
+
+	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectToApply, float Level) const;
+	void InitializeDefaultAttributes() const;
+	
 };

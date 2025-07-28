@@ -75,6 +75,46 @@ public:
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_Vigor,Category="Primary Attributes")
 	FGameplayAttributeData Vigor;
 	ATTRIBUTE_ACCESSORS(ThisClass,Vigor);
+
+	/*
+	*   Secondary Attributes
+	*/
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_Armor,Category="Secondary Attributes")
+	FGameplayAttributeData Armor;
+	ATTRIBUTE_ACCESSORS(ThisClass,Armor);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_ArmorPenetration,Category="Secondary Attributes")
+	FGameplayAttributeData ArmorPenetration;
+	ATTRIBUTE_ACCESSORS(ThisClass,ArmorPenetration);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_BlockChance,Category="Secondary Attributes")
+	FGameplayAttributeData BlockChance;
+	ATTRIBUTE_ACCESSORS(ThisClass,BlockChance);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_CriticalHitChance,Category="Secondary Attributes")
+	FGameplayAttributeData CriticalHitChance;
+	ATTRIBUTE_ACCESSORS(ThisClass,CriticalHitChance);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_CriticalHitDamage,Category="Secondary Attributes")
+	FGameplayAttributeData CriticalHitDamage;
+	ATTRIBUTE_ACCESSORS(ThisClass,CriticalHitDamage);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_HealthRegeneration,Category="Secondary Attributes")
+	FGameplayAttributeData HealthRegeneration;
+	ATTRIBUTE_ACCESSORS(ThisClass,HealthRegeneration);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_ManaRegeneration,Category="Secondary Attributes")
+	FGameplayAttributeData ManaRegeneration;
+	ATTRIBUTE_ACCESSORS(ThisClass,ManaRegeneration);
+	
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_MaxHealth,Category="Secondary Attributes")
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(ThisClass,MaxHealth);
+	
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_MaxMana,Category="Secondary Attributes")
+	FGameplayAttributeData MaxMana;
+	ATTRIBUTE_ACCESSORS(ThisClass,MaxMana);
 	/*
 	 *   Vital Attributes
 	 */
@@ -83,17 +123,31 @@ public:
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(ThisClass,Health);
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_MaxHealth,Category="Vital Attributes")
-	FGameplayAttributeData MaxHealth;
-	ATTRIBUTE_ACCESSORS(ThisClass,MaxHealth);
-	
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_Mana,Category="Vital Attributes")
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(ThisClass,Mana);
-	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_MaxMana,Category="Vital Attributes")
-	FGameplayAttributeData MaxMana;
-	ATTRIBUTE_ACCESSORS(ThisClass,MaxMana);
+
+
+	UFUNCTION()
+	void OnRep_Armor(const FGameplayAttributeData& OldArmor);
+
+	UFUNCTION()
+	void OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration);
+
+	UFUNCTION()
+	void OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance);
+
+	UFUNCTION()
+	void OnRep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance);
+
+	UFUNCTION()
+	void OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage);
+
+	UFUNCTION()
+	void OnRep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration);
+
+	UFUNCTION()
+	void OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration);
 	
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth);

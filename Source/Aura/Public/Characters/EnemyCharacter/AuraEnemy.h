@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Characters/AuraCharacterBase.h"
+#include "Inrerfaces/CombatInterface.h"
 #include "AuraEnemy.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class AURA_API AAuraEnemy : public AAuraCharacterBase
+class AURA_API AAuraEnemy : public AAuraCharacterBase, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -23,8 +24,17 @@ public:
 	
 	UFUNCTION()
 	void UnHighLightActor(UPrimitiveComponent* TouchedComponent);
-	
+
+	// Combat Interface
+	virtual int32 GetPlayerLevel() override;
+	// End Combat Interface
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="EnemyLevel")
+	int32 Level = 1;
+private:
+
+	
 };
