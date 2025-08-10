@@ -13,6 +13,7 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+
 USTRUCT(BlueprintType)
 struct FEffectProperties
 {
@@ -42,6 +43,9 @@ public:
 	
 };
 
+//typedef TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPointer;
+template<class T>
+using TStaticFuncPtr =typename TBaseStaticDelegateInstance<T,FDefaultDelegateUserPolicy>::FFuncPtr;
 /**
  * 
  */
@@ -56,6 +60,9 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
+	//ППц какое запутанное описание будет - курс GAS лекция 95 Mapping Tags To Attributes если непонятно и нужно освежить в памяти
+	TMap<FGameplayTag,TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
+	//TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FunctionPointer;
 	/*
 	 *   Primary Attributes
 	 */
@@ -100,6 +107,10 @@ public:
 	FGameplayAttributeData CriticalHitDamage;
 	ATTRIBUTE_ACCESSORS(ThisClass,CriticalHitDamage);
 
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_CriticalHitResilience,Category="Secondary Attributes")
+	FGameplayAttributeData CriticalHitResilience;
+	ATTRIBUTE_ACCESSORS(ThisClass,CriticalHitResilience);
+
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_HealthRegeneration,Category="Secondary Attributes")
 	FGameplayAttributeData HealthRegeneration;
 	ATTRIBUTE_ACCESSORS(ThisClass,HealthRegeneration);
@@ -143,6 +154,9 @@ public:
 	UFUNCTION()
 	void OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage);
 
+	UFUNCTION()
+	void OnRep_CriticalHitResilience(const FGameplayAttributeData& OldCriticalHitResilience);
+	
 	UFUNCTION()
 	void OnRep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration);
 
