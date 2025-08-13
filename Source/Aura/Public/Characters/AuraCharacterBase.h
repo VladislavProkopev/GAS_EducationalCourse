@@ -5,15 +5,17 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "Inrerfaces/CombatInterface.h"
 
 #include "AuraCharacterBase.generated.h"
 
 class UGameplayEffect;
 class UAttributeSet;
 class UAbilitySystemComponent;
+class UGameplayAbility;
 
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface
+class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -29,6 +31,11 @@ protected:
 	UPROPERTY(EditAnywhere,Category="Combat")
 	TObjectPtr<class USkeletalMeshComponent> Weapon;
 
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName WeaponTipSocketName;
+
+	virtual FVector GetCombatSocketLocation() override;
+	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
@@ -48,5 +55,9 @@ protected:
 
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectToApply, float Level) const;
 	void InitializeDefaultAttributes() const;
-	
+
+	virtual void AddCharacterAbilities();
+private:
+	UPROPERTY(EditAnywhere,Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };
