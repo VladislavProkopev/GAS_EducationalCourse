@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "GameFramework/Actor.h"
 #include "AuraProjectile.generated.h"
 
+class UNiagaraSystem;
 class UProjectileMovementComponent;
 class USphereComponent;
 
@@ -19,6 +21,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+	virtual void Destroyed() override;
+
+	UPROPERTY(BlueprintReadWrite, meta=(ExposeOnSpawn = true))
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
 protected:
 	virtual void BeginPlay() override;
 	
@@ -30,6 +37,20 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> Sphere;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UNiagaraSystem> ImpactEffect;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USoundBase> ImpactSound;
+
+	//UPROPERTY(EditAnywhere)
+	//TObjectPtr<USoundBase> ProjectileLoop;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UAudioComponent> ProjectileLoopComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ProjectileLifespan = 5.f;
 	
-	
+	bool bHit = false;
 };

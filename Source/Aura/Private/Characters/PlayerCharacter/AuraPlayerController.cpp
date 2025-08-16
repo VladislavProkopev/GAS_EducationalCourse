@@ -78,6 +78,8 @@ void AAuraPlayerController::SetupInputComponent()
 	AuraInput->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
 	AuraInput->BindAbilityActions(InputConfig,this,&AAuraPlayerController::AbilityInputTagPressed,
 		&AAuraPlayerController::AbilityInputTagReleased,&AAuraPlayerController::AbilityInputTagHeld);
+	AuraInput->BindAction(ShiftAction,ETriggerEvent::Started,this,&AAuraPlayerController::ShiftPressed);
+	AuraInput->BindAction(ShiftAction,ETriggerEvent::Completed,this,&AAuraPlayerController::ShiftReleased);
 }
 
 
@@ -97,6 +99,7 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(RightDirection,InputAxisVector.X);
 	}
 }
+
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
@@ -123,14 +126,12 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	if (GetASC() == nullptr) return;
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		GetASC()->AbilityInputTagHeld(InputTag);
+		GetASC()->AbilityInputTagReleased(InputTag);
 	}
-	if (bTargeting)
+	GetASC()->AbilityInputTagReleased(InputTag);
+	if (!bTargeting && !bShiftPressed)
 	{
-		GetASC()->AbilityInputTagHeld(InputTag);
-	}
-	else
-	{
+		GetASC()->AbilityInputTagReleased(InputTag);
 		APawn* ControlledPawn = GetPawn();
 		if (FollowTime<=ShortPressThreshold && ControlledPawn) //Если короткое нажатие то bAutoRuning = true
 		{
@@ -166,7 +167,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	{
 		GetASC()->AbilityInputTagHeld(InputTag);
 	}
-	if (bTargeting)
+	if (bTargeting || bShiftPressed)
 	{
 		GetASC()->AbilityInputTagHeld(InputTag);
 	}

@@ -38,6 +38,8 @@ int32 AAuraCharacter::GetPlayerLevel()
 	return AuraPlayerState->GetPlayerLevel();
 }
 
+
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
@@ -67,6 +69,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 
 	InitAbilityActorInfo(); //Инициализация для сервера
 	AddCharacterAbilities();
+	OwnerController = CastChecked<AAuraPlayerController>(NewController);
 }
 
 void AAuraCharacter::OnRep_PlayerState()

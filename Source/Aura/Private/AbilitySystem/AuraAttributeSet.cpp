@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/AuraAttributeSet.h"
 
+#include <string>
+
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGameplayTags.h"
 #include "GameplayEffectExtension.h"
@@ -81,15 +83,18 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+	SetEffectProperties(Data,EffectProperties);
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
+		
+		UE_LOG(LogTemp,Warning,TEXT("Health changed on %s, Health: %f"),*EffectProperties.TargetAvatarActor->GetName(), GetHealth());
 	}
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
 		SetMana(FMath::Clamp(GetMana(),0.f,GetMaxMana()));
 	}
-	SetEffectProperties(Data,EffectProperties);
+	
 }
 
 void UAuraAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor)
@@ -181,24 +186,33 @@ void UAuraAttributeSet::SetEffectProperties(const struct FGameplayEffectModCallb
 	{
 		OutProps.EffectContextHandle = SourceContext;
 		UAbilitySystemComponent* const SourceASC = SourceContext.GetInstigatorAbilitySystemComponent();
-		if (IsValid(SourceASC))
+		if (IsValid(SourceASC) && SourceASC->AbilityActorInfo.IsValid())
 		{
 			OutProps.SourceAbilitySystemComponent = SourceASC;
+			
 			AActor* const SourceActor = SourceASC->AbilityActorInfo->AvatarActor.Get();
 			if (IsValid(SourceActor))
 			{
 				OutProps.SourceAvatarActor = SourceActor;
+				OutProps.SourceCharacter = Cast<ACharacter>(SourceActor);
 			}
-			APlayerController* const SourceController = SourceASC->AbilityActorInfo->PlayerController.Get();
+			AController* SourceController = SourceASC->AbilityActorInfo->PlayerController.Get();
+			if (!SourceController)
+			{
+				if (const APawn* Pawn = Cast<APawn>(SourceActor))
+				{
+					SourceController = Pawn->GetController();
+				}
+			}
 			if (IsValid(SourceController))
 			{
 				OutProps.SourceController = SourceController;
 			}
-			ACharacter* const SourceCharacter = Cast<ACharacter>(SourceController->GetPawn());
+			/*ACharacter* const SourceCharacter = Cast<ACharacter>(SourceController->GetPawn());
 			if (IsValid(SourceCharacter))
 			{
 				OutProps.SourceCharacter = SourceCharacter;
-			}
+			}*/
 		}
 	}
 	
@@ -206,17 +220,25 @@ void UAuraAttributeSet::SetEffectProperties(const struct FGameplayEffectModCallb
 	if (IsValid(TargetAvatarActor))
 	{
 		OutProps.TargetAvatarActor = TargetAvatarActor;
+		OutProps.TargetAvatarActor = Cast<ACharacter>(TargetAvatarActor);
 	}
-	AController* const TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+	AController* TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+	if (!TargetController)
+	{
+		if (const APawn* Pawn = Cast<APawn>(TargetAvatarActor))
+		{
+			TargetController = Pawn->GetController();
+		}
+	}
 	if (IsValid(TargetController))
 	{
 		OutProps.TargetController = TargetController;
 	}
-	ACharacter* const TargetCharacter = Cast<ACharacter>(TargetController->GetPawn());
+	/*ACharacter* const TargetCharacter = Cast<ACharacter>(TargetController->GetPawn()); 
 	if (IsValid(TargetCharacter))
 	{
 		OutProps.TargetCharacter = TargetCharacter;
-	}
+	}*/
 	UAbilitySystemComponent* const TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetAvatarActor);
 	if (IsValid(TargetASC))
 	{

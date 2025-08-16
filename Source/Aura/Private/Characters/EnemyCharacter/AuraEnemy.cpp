@@ -31,15 +31,10 @@ void AAuraEnemy::BeginPlay()
 
 void AAuraEnemy::InitAbilityActorInfo()
 {
-	if (AbilitySystemComponent && AttributeSet)
-	{
-		AbilitySystemComponent->InitAbilityActorInfo(this,this);
-		UAuraAbilitySystemComponent* TempVar = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
-		if (TempVar)
-		{
-			TempVar->AbilityActorInfoSet();
-		}
-	}
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	InitializeDefaultAttributes();
 }
 
 void AAuraEnemy::HighLightActor(UPrimitiveComponent* TouchedComponent)

@@ -7,6 +7,7 @@
 #include "Inrerfaces/CombatInterface.h"
 #include "AuraCharacter.generated.h"
 
+class AAuraPlayerController;
 class UCameraComponent;
 class USpringArmComponent;
 /**
@@ -35,5 +36,6 @@ private:
 	UPROPERTY(EditAnywhere,Category=Camera)
 	TObjectPtr<UCameraComponent> Camera;
 
-	
+	UPROPERTY()
+	AAuraPlayerController* OwnerController;
 };
